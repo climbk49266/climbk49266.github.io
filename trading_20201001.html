@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>HK No Code - Blog on Trading and Data Sciecne</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- add icon link -->
+  <link href="img/web_icon.png" rel="icon" type="image/x-icon">
+  <!-- Custom fonts for this template -->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this template -->
+  <link href="css/clean-blog.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">HK No Code</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      Menu
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="about.html">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="trading_20201001.html">Trading</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="date_science_20201012.html">Data science</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="hkej_article_20191212.html">Other article</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="contact.html">Contact</a>     </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('img/trading.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>Momentum Trading on multiple Index Futures</h1>
+            <h2 class="subheading">Applying momentum trading rule on multiple index, and backtesting using python</h2>
+            <span class="meta">Posted by
+              <a href="#">Lawrence Luk</a>
+              on October 1, 2020</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+<article>
+  <div class="container">
+  <div class="row">
+  <div class="col-lg-8 col-md-10 mx-auto">
+
+    <h2 class="section-heading">Introduction</h2>
+
+    <p>In this article, We are going to use a momentum strategy with one parameter, to explore the profitability of intraday trading on multiple index futures, including HSI, XINA50, KOSPI, N225. Momentum strategies are simple, we follow the trend, hold it until the trend is reverting, then we will close the position. We are betting on the direction of the index, whether go up or go down, which is risky, however, momentum strategies are easy and simple to use with a reasonable return.</p>
+    
+    <h2 class="section-heading">Data</h2>
+
+    <p>Firstly we read our index futures data. We are using one minute index active futures data to backtest our strategy. The following are HSI index futures data (HI1) from 2018 to 2020. For HSI, the day session starts at 91500, and end until 163000, we will trade on this session on HSI. There are 678 days in HSI futures data</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20201001/trading_20201001_1.png" alt="">
+    </a>
+
+    <h2 class="section-heading">Backtest results</h2>
+
+    <p>We have 17 choices of parameters, the step size is 2, from 6 to 40, which capture the different size of momentum. We apply the same momentum model to our targets. Let's take a look at the result on HSI index futures.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20201001/trading_20201001_2.png" alt="">
+    </a>
+
+    <p>We are using <b>pandas.DataFrame.groupby</b> to produce this result. The return is calculated in index points and it define as </p>
+    
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20201001/trading_20201001_3.png" alt="">
+    </a>
+  
+    
+    <p>We calculate the mean, sum, standard-deviation, and count and t-statistic of the return. This strategy is not bad in HSI, the maximum t-statistic of parameters is about 2, which is not bad. The range of parameters, from 12 to 24 can get a similar return, which means that the model is not overfitted.</p>
+
+    <p>Lets plot the cumulative log return of parameters from 12 to 24 in HSI.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20201001/trading_20201001_4.png" alt="">
+    </a>
+    <span class="caption text-muted">x axis is number of trading day, y axis is cumulative log return.</span>
+
+    <p>We can further breakdown into long or short signal. We can see that short momentum are more profitable than long signal in HSI.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20201001/trading_20201001_5.jp2" alt="">
+    </a>
+
+    <p>We focus on the parameters range from 12 to 24, and we will plot the cumulative log return again. Let see how it looks.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20201001/trading_20201001_6.png" alt="">
+    </a>
+
+    <p>The equity curve looks better, the number of trade cut by half, mean return per trade increase. In a larger size of parameters, the return of long signal is close to zero, if we ignore the long signal, we can benefit from paying less trading cost.</p>
+
+    <h2 class="section-heading">Can we beat the index?</h2>
+
+    <p>The most important question of the trading strategy is can we use this to strategy to beat the index? Let's take a look at the performance of the index first.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20201001/trading_20201001_7.png" alt="">
+    </a>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20201001/trading_20201001_8.png" alt="">
+    </a>
+
+    <span class="caption text-muted">Since IB do not provide XINA50 index data, therefore we just skip it.</span>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20201001/trading_20201001_13.png" alt="">
+    </a>
+
+    <span class="caption text-muted">XINA50 Log return from 20180101 to 20200930 is ~4.78%.</span>
+
+
+    <p>If we holding the market portfolio on these markets except XINA50 from 20180102 to 20200930 we have a negative return. In HSI we can easily beat the index by using our momentum trading strategy.</p>
+
+    <h2 class="section-heading">Performance on KOSPI, N225 and XINA50</h2>
+
+    <p>Because we have 3 more markets, 17 choices for each and decomposed into long or short, we have too much data to look at, so we will just filter out some bad parameters using the criteria. We only want the parameters with the absolute value of t-statistic is greater than 1.5. Let's see how many parameters can pass our criteria.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20201001/trading_20201001_9.png" alt="">
+    </a>
+
+    <p>There are still quite many parameters that can pass the criteria. Somethings interesting is in HSI (HI1) and KOSPI (KM1) only short momentum works, on N255 (NO1) only long momentum works, and in XINA50 (XU1) both long and short works. Let's visualize the cumulative log return on each market. We believed that the market microstructure would affect the behavior of the market, the results differ between markets</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20201001/trading_20201001_14.png" alt="">
+    </a>
+
+    <span class="caption text-muted">Works better when the signal is -1.</span>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20201001/trading_20201001_10.png" alt="">
+    </a>
+
+    <span class="caption text-muted">Works better when the signal is -1.</span>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20201001/trading_20201001_11.png" alt="">
+    </a>
+
+    <span class="caption text-muted">Works better when the signal is 1.</span>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20201001/trading_20201001_12.png" alt="">
+    </a>
+
+    <span class="caption text-muted">Works either the signal is 1 or -1.</span>
+
+    <h2 class="section-heading">Conclusion</h2>
+
+    <p>Our momentum strategy works better than it's index, however, the return is not cost deducted, we have to consider the slippages and transaction cost before we implement the strategy. In the coming article, we will introduce one more parameter to improve this strategy.</p>
+
+
+
+
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <hr>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy; HKNOCODE 2020</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/clean-blog.min.js"></script>
+
+</body>
+
+</html>
