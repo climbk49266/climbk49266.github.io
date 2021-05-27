@@ -46,7 +46,7 @@
 				<a class="nav-link" href="trading_20201001.html">Trading</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="data_science_20201012.html">Data science</a>
+				<a class="nav-link" href="date_science_20201012.html">Data science</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="hkej_article_20191212.html">Other article</a>
@@ -66,7 +66,7 @@
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="post-heading">
             <h1>Multivariate Time Series Forecasting</h1>
-            <h2 class="subheading">Using TensorFlow LSTM model to predict close price of index futures</h2>
+            <h2 class="subheading">Using TensorFlow LSTM model to predict intraday high, low and return of index futures</h2>
             <span class="meta">Posted by
               <a href="#">Lawrence Luk</a>
               on October 1, 2020</span>
@@ -84,7 +84,7 @@
 
     <h2 class="section-heading">Introduction</h2>
 
-    <p>LSTM is a popular method for time series forecasting, in this article we will use TensorFlow LSTM model to predict HSI futures next close price. This article is inspired by many research paper I have read before, which some of them can predict the price very well using LSTM model using some simple data. We are not going to dive into the mathematics details, for the mathematics details please read <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/">this article.</a></p>
+    <p>LSTM is popular method for time series forecasting, in this article we will use TensorFlow LSTM model to predict HSI futures intraday next high, low and close. This articel is inspired by many research paper I have read before, which some of them can predict well using LSTM model using some simply data. We are not going to dive into the mathematics details, for the mathematics details please read <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/">this article.</a></p>
 
     <h2 class="section-heading">Data</h2>
     
@@ -94,7 +94,7 @@
       <img class="img-fluid" src="img/data_science/20201012/data_sceicen_20201012_1.png" alt="">
     </a>
 
-    <p>After the preprocessing, the data will look like this.</p>
+    <p>After the preprocess, the data will look like this.</p>
 
     <a href="#">
       <img class="img-fluid" src="img/data_science/20201012/data_sceicen_20201012_2.png" alt="">
@@ -102,7 +102,7 @@
 
     <h2 class="section-heading">LSTM model setting</h2>
 
-    <p>Our lookback period of LSTM model is 22 and makes single-time-step prediction. We will try one LSTM layer with 8 units. We use <b>MeanSquaredError</b> as our loss function and use <b>MeanAbsoluteError</b> to evaluate our model. The maximum number of epoch will be 1000. We also add an early stopping to stop training if <b>MeanSquaredError</b> on our validation data is not improving to reduce over-fitting.</p>
+    <p>Our look back period of LSTM model is 22 and make single-time-step prediction. We will try one LSTM layer with 8 units. We use <b>MeanSquaredError</b> as our loss function and use <b>MeanAbsoluteError</b> to evaluate our model. We also add a early stopping to stop training if <b>MeanSquaredError</b> on our validation data is not improving.</p>
 
     <a href="#">
       <img class="img-fluid" src="img/data_science/20201012/data_sceicen_20201012_3.png" alt="">
@@ -120,33 +120,7 @@
       <img class="img-fluid" src="img/data_science/20201012/data_sceicen_20201012_5.png" alt="">
     </a>
 
-    <p>We will initially train our LSTM model using the first 1900 data points, then we will make 100 predictions using the trained model. After 100 predictions, we will retrain our model by adding extra 50 data points, and repeat until we predict all data points.</p>
 
-    <a href="#">
-      <img class="img-fluid" src="img/data_science/20201012/data_sceicen_20201012_6.png" alt="">
-    </a>
-
-    <p>Predicting stock price is a difficult task, by using the simple data in our example, LSTM does not have strong predictive power. On the other hand, neural network are sensitive to hyperparameters, for example, the number of units and layers, learning rate. For me, it is difficult to train a robust model to make predictions, due to the variety choice of hyperparameters can produce different results. We only bet on a robust trading signal, however, we can simulate the trading profit by back-testing this trading signal.</p>
-
-    <h2 class="section-heading">Back-testing results</h2>
-
-    <p>Our trading strategy is simple, by the end of the day, if the predicted close price of HSI futures for tomorrow is high than the current close price, our position will be 1, otherwise -1.</p>
-
-    <a href="#">
-      <img class="img-fluid" src="img/data_science/20201012/data_sceicen_20201012_7.png" alt="">
-    </a>
-
-    <p>The performance of our trading strategy is bad, it lost 6000 index points over 1306 days. It can due to the low quality of input, over-fitting, the choice of hyperparameters.</p> 
-    
-    <p>We can try to improve our prediction model by adding more information into our training data, for example, fundamental data, technical indicators. Optimization of hyperparameters is also important, <b>GridSearchCV</b> is a common technique for searching hyperparameters.</p>
-
-    <h2 class="section-heading">References</h2>
-
-    <p>1. <a href="https://www.datacamp.com/community/tutorials/lstm-python-stock-market">https://www.datacamp.com/community/tutorials/lstm-python-stock-market</a></p>
-
-    <p>2. <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/">http://colah.github.io/posts/2015-08-Understanding-LSTMs/</a></p>
-
-    
         </div>
       </div>
     </div>
