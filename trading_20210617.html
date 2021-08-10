@@ -43,7 +43,7 @@
         <a class="nav-link" href="about.html">About</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="trading_20210617.html">Trading</a>
+        <a class="nav-link" href="trading_20210701.html">Trading</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="data_science_20201012.html">Data science</a>
@@ -59,7 +59,7 @@
 </nav>
 
   <!-- Page Header -->
-  <header class="masthead" style="background-image: url('img/trading/20210617/bg.jpg')">
+  <header class="masthead" style="background-image: url('img/trading/20210701/bg.jpg')">
     <div class="overlay"></div>
     <div class="container">
       <div class="row">
@@ -91,7 +91,7 @@
     <p>We will update our data to 20210701. The in-sample period of our backtest starts from 20180102 to 20200930, therefore we have approximately 180 days of intraday minute by minute data for each market. As we discussed in the last article, we will trade index futures of HSI (hi1), NIKKEI (no1), KOSPI2 (km1), and A50 (xu1).</p>
 
     <a href="#">
-      <img class="img-fluid" src="img/trading/20210617/img1.png" alt="">
+      <img class="img-fluid" src="img/trading/20210701/img1.png" alt="">
     </a>
     
     <span class="caption text-muted">hi1 data from 20180103 to 20210701.</span>
@@ -105,13 +105,13 @@
     <p>We will perform a backtest on those parameters we chose in the last article. Firstly, let us look at the results of our trading rule on hi1. We chose a large range of parameters which are 12 to 24.</p>
     
     <a href="#">
-      <img class="img-fluid" src="img/trading/20210617/img2.png" alt="">
+      <img class="img-fluid" src="img/trading/20210701/img2.png" alt="">
     </a>
 
     <p>Most of the parameters are moving upward in the out-of-sample period. If we from an equally weighted portfolio those 7 parameters which trade 1 hi1 contract, then we can compare our portfolio of strategies to a buy and hold (BAH), and see whether the momentum strategy before cost can beat BAH.</p>
 
     <a href="#">
-      <img class="img-fluid" src="img/trading/20210617/img3.png" alt="">
+      <img class="img-fluid" src="img/trading/20210701/img3.png" alt="">
     </a>
 
     <p>The cumulative log return on our portfolio and BAH are 0.137439 and 0.066377, which we theoretically can beat the BAH in hi1 in an out-of-sample period.</p>
@@ -121,43 +121,43 @@
     <p>In the previous article, we decomposed our momentum strategies into a long and short signal, and chose those absolute value of t statistic greater than 1.5, we found that most of the short signals outperform long signals, it might indicate that short momentum exists in those markets. Let us form a portfolio of strategies and take a look at the results.</p>
 
     <a href="#">
-      <img class="img-fluid" src="img/trading/20210617/img4.png" alt="">
+      <img class="img-fluid" src="img/trading/20210701/img4.png" alt="">
     </a>
 
     <a href="#">
-      <img class="img-fluid" src="img/trading/20210617/img5.png" alt="">
+      <img class="img-fluid" src="img/trading/20210701/img5.png" alt="">
     </a>
     
     <a href="#">
-      <img class="img-fluid" src="img/trading/20210617/img6.png" alt="">
+      <img class="img-fluid" src="img/trading/20210701/img6.png" alt="">
     </a>
 
     <a href="#">
-      <img class="img-fluid" src="img/trading/20210617/img7.png" alt="">
+      <img class="img-fluid" src="img/trading/20210701/img7.png" alt="">
     </a>
 
     <p>As we can see, momentum strategies on KOSPI2 (km1) are not very well in the out-of-sample period, however, the cumulative log return of the others are higher than the in-sample test especially HSI and XINA50. Just like our previous section, we will compare our trading strategies to a BAH, hoping that our strategies can beat it.</p>
 
     <a href="#">
-      <img class="img-fluid" src="img/trading/20210617/img8.png" alt="">
+      <img class="img-fluid" src="img/trading/20210701/img8.png" alt="">
     </a>
 
     <a href="#">
-      <img class="img-fluid" src="img/trading/20210617/img9.png" alt="">
+      <img class="img-fluid" src="img/trading/20210701/img9.png" alt="">
     </a>
     
     <a href="#">
-      <img class="img-fluid" src="img/trading/20210617/img10.png" alt="">
+      <img class="img-fluid" src="img/trading/20210701/img10.png" alt="">
     </a>
 
     <a href="#">
-      <img class="img-fluid" src="img/trading/20210617/img11.png" alt="">
+      <img class="img-fluid" src="img/trading/20210701/img11.png" alt="">
     </a>
 
     <p>The results show that the momentum strategies can only beat XINA50, furthermore, the standard deviation of return of momentum strategies are much lower than BAH in HSI, however, the most important metric is profitability.</p>
 
     <a href="#">
-      <img class="img-fluid" src="img/trading/20210617/img12.png" alt="">
+      <img class="img-fluid" src="img/trading/20210701/img12.png" alt="">
     </a>
 
     <h2 class="section-heading">Conclusion</h2>
