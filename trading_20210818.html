@@ -118,9 +118,9 @@
 
     <p>We will directly use <a href="https://www.statsmodels.org/stable/generated/statsmodels.tsa.stattools.coint.html"><b>statsmodels.tsa.stattools.coint</b></a> to obtain t-statistic of Augmented Dickey-Fuller test on the residual series and the its p-value.</p>
 
-    <p>By using above test, unfortunately, hi1 and xu1 are not co-integrated, the test return <b>(-2.2068, 0.4208, array([-3.8964 , -3.3361, -3.0444]))</b>. It means that we cannot reject the hypothesis that there is no cointegrating relationship, which a bit out of our expectation.</p>
+    <p>By using above test, unfortunately, hi1 and xu1 are not co-integrated, the test return <b>(-2.2068, 0.4208, array([-3.8964 , -3.3361, -3.0444]))</b>. It means that we cannot reject the hypothesis that there is no cointegrating relationship, which a bit out of our expectation. Although they are not co-intergrated, we can try to construct the spread and get the backtest result from the pair.</p>
 
-    <p>However, km1 and no1 are co-integrated, the test return <b>(-3.6433, 0.0216, array([-3.8964, -3.3361, -3.0444]))</b>, the small p-value (0.0216) which below our critical value 0.05 indicate that there is cointegrating relationship, the residual series is stationary.</p>
+    <p>On the other hand, km1 and no1 are co-integrated, the test return <b>(-3.6433, 0.0216, array([-3.8964, -3.3361, -3.0444]))</b>, the small p-value (0.0216) which below our critical value 0.05 indicate that there is cointegrating relationship, the residual series is stationary.</p>
 
     <h2 class="section-heading">Trading strategy</h2>
 
@@ -131,6 +131,14 @@
       <li>Short the spread if z-score above 1</li>
       <li>Close the positions if z-score go back to zero or on market close</li>
     </ul>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20210818/img3.png" alt="">
+    </a>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20210818/img4.png" alt="">
+    </a>
 
     <p></p>
 
