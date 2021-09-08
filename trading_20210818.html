@@ -125,13 +125,7 @@
     <h2 class="section-heading">Trading strategy</h2>
 
     <p>We will fit an least squares regression to obtain the hedge ratio, and then use it for calculating the spread. Z-score can normalize the spread so that we can generate our trading signal. After all calculation, we obtain a spread series which looks mean-reverting, and we can define our trading strategy. For example:</p>
-
-    <ul>
-      <li>Long the spread if z-score below -1</li>
-      <li>Short the spread if z-score above 1</li>
-      <li>Close the positions if z-score go back to zero or on market close</li>
-    </ul>
-
+    
     <a href="#">
       <img class="img-fluid" src="img/trading/20210818/img3.png" alt="">
     </a>
@@ -140,7 +134,23 @@
       <img class="img-fluid" src="img/trading/20210818/img4.png" alt="">
     </a>
 
-    <p></p>
+    <ul>
+      <li>Long the spread if z-score below -1</li>
+      <li>Short the spread if z-score above 1</li>
+      <li>Close the positions if z-score go back to zero or on market close</li>
+    </ul>
+
+    <p>The above trading strategy is simple, we can fit different parameters into it, for example, trigger level of trading signal, the exit level, etc. And finally we can get the following plot of equity cruve on both pairs.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20210818/img5.png" alt="">
+    </a>
+
+    <a href="#">
+      <img class="img-fluid" src="img/trading/20210818/img6.png" alt="">
+    </a>
+
+    <p>The results are not after costs, costs would play in important role in pair trading, therefore these results may not be practical.</p>
 
 
     <h2 class="section-heading">Conclusion</h2>
