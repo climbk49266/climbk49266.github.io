@@ -84,17 +84,17 @@
 
     <h2 class="section-heading">Introduction</h2>
 
-    <p>This article will discuss cointegration and pair trading on index futures using python. For cointegration test, we will use <a href="https://www.statsmodels.org/stable/generated/statsmodels.tsa.stattools.coint.html"><b>statsmodels.tsa.stattools.coint</b></a>, and <a href="https://www.statsmodels.org/stable/generated/statsmodels.regression.linear_model.OLS.html?highlight=ols#statsmodels.regression.linear_model.OLS"><b>statsmodels.regression.linear_model.OLS</b></a> for least squares regression. <a href="https://palomar.home.ece.ust.hk/MAFS5310_lectures/Rsession_pairs_trading_with_R.html#Cointegration_tests">This lecture</a> is well explained the procduce of cointegration and pair trading, please read this lecture for comprehensive details.</p>
+    <p>This article will discuss cointegration and pair trading on index futures using python. For cointegration test, we will use <a href="https://www.statsmodels.org/stable/generated/statsmodels.tsa.stattools.coint.html"><b>statsmodels.tsa.stattools.coint</b></a>, and <a href="https://www.statsmodels.org/stable/generated/statsmodels.regression.linear_model.OLS.html?highlight=ols#statsmodels.regression.linear_model.OLS"><b>statsmodels.regression.linear_model.OLS</b></a> for least squares regression. <a href="https://palomar.home.ece.ust.hk/MAFS5310_lectures/Rsession_pairs_trading_with_R.html#Cointegration_tests">This lecture</a> is well explained the produce of cointegration and pair trading, please read this lecture for comprehensive details.</p>
     
-    <p>We can perform Engle-Granger cointegration test using python in few steps, but before that let us take a look what we will perform in the test.</p>
+    <p>We can perform Engle-Granger cointegration test using python in few steps, but before that let us take a look at what we will perform in the test.</p>
 
-    <p>First, we will form the cointegrating residual using least squares regression. Second we will use <a href="https://www.statsmodels.org/stable/generated/statsmodels.tsa.stattools.adfuller.html?highlight=adfull"><b>statsmodels.tsa.stattools.adfuller</b></a> to test whether the residual contain a unit root. If the residual doesn't have unit root, it means that null hypothesis is not rejected, the residual series is stationary and it will mean-reverting. As a result, we can trade the spread by pair trade.</p>
+    <p>First, we will form the cointegrating residual using least squares regression. Second, we will use <a href="https://www.statsmodels.org/stable/generated/statsmodels.tsa.stattools.adfuller.html?highlight=adfull"><b>statsmodels.tsa.stattools.adfuller</b></a> to test whether the residual contains a unit root. If the residual doesn't have a unit root, it means that the null hypothesis is not rejected, the residual series is stationary and it will mean-reverting. As a result, we can trade the spread by pair trade.</p>
     
     <h2 class="section-heading">Data</h2>
 
-    <p>First pair we choose is HSI futures (hi1) vs XINA50 futures (xu1), the reason of chooing this pair is that, Hong Kong stock market and China stock market are highly corelated, as increasing number of China's company raise capital in HKEX. Therefore HSI and XINA50 will share some systematic risk and expect that they are co-integrated.</p>
+    <p>The first pair we choose is HSI futures (hi1) vs XINA50 futures (xu1), the reason for choosing this pair is that the Hong Kong stock market and China stock market are highly correlated, as an increasing number of China's companies raise capital in HKEX. Therefore HSI and XINA50 will share some systematic risk and expect that they are co-integrated.</p>
 
-    <p>The dataset contain hi1 and xu1 close minute by minute closing log price from 2015 to 2021. We will compute the residual and it's Augmented Dickey-Fuller test statistic as long as p-value.</p>
+    <p>The dataset contains hi1 and xu1 close minute by minute closing log price from 2015 to 2021. We will compute the residual and its Augmented Dickey-Fuller test statistic as long as p-value.</p>
 
     <p>By constructing a portfolio which long hi1 and short xu1 (short hi1 and long xu1), we can diversify the systematic risk and lower the risk since it is market-neutral.</p>
 
@@ -105,7 +105,7 @@
     <span class="caption text-muted">A plot of hi1 and xu1 log price from 20150205 to 20210818.</span>
 
 
-    <p>Second pair of futures is K200 futures (km1) vs N255 futures (no1). The reason is simple, they are Asian market, which share similar systematic risk.</p>
+    <p>The second pair of futures is K200 futures (km1) vs N255 futures (no1). The reason is simple, they are Asian markets, which shares similar systematic risk.</p>
 
     <a href="#">
       <img class="img-fluid" src="img/trading/20210818/img2.png" alt="">
@@ -116,15 +116,15 @@
 
     <h2 class="section-heading">Cointegration test</h2>
 
-    <p>We will directly use <a href="https://www.statsmodels.org/stable/generated/statsmodels.tsa.stattools.coint.html"><b>statsmodels.tsa.stattools.coint</b></a> to obtain t-statistic of Augmented Dickey-Fuller test on the residual series and the its p-value.</p>
+    <p>We will directly use <a href="https://www.statsmodels.org/stable/generated/statsmodels.tsa.stattools.coint.html"><b>statsmodels.tsa.stattools.coint</b></a> to obtain t-statistic of Augmented Dickey-Fuller test on the residual series and its p-value.</p>
 
-    <p>By using above test, unfortunately, hi1 and xu1 are not co-integrated, the test return <b>(-2.2068, 0.4208, array([-3.8964 , -3.3361, -3.0444]))</b>. It means that we cannot reject the hypothesis that there is no cointegrating relationship, which a bit out of our expectation. Although they are not co-intergrated, we can try to construct the spread and get the backtest result from the pair.</p>
+    <p>By using above test, unfortunately, hi1 and xu1 are not co-integrated, the test return <b>(-2.2068, 0.4208, array([-3.8964 , -3.3361, -3.0444]))</b>. It means that we cannot reject the hypothesis that there is no cointegrating relationship, which is a bit out of our expectation. Although they are not co-integrated, we can try to construct the spread and get the backtest result from the pair.</p>
 
-    <p>On the other hand, km1 and no1 are co-integrated, the test return <b>(-3.6433, 0.0216, array([-3.8964, -3.3361, -3.0444]))</b>, the small p-value (0.0216) which below our critical value 0.05 indicate that there is cointegrating relationship, the residual series is stationary.</p>
+    <p>On the other hand, km1 and no1 are co-integrated, the test return <b>(-3.6433, 0.0216, array([-3.8964, -3.3361, -3.0444]))</b>, the small p-value (0.0216) which below our critical value 0.05 indicate that there is a cointegrating relationship, the residual series is stationary.</p>
 
     <h2 class="section-heading">Trading strategy</h2>
 
-    <p>We will fit an least squares regression to obtain the hedge ratio, and then use it for calculating the spread. Z-score can normalize the spread so that we can generate our trading signal. After all calculation, we obtain a spread series which looks mean-reverting, and we can define our trading strategy. For example:</p>
+    <p>We will fit a least squares regression to obtain the hedge ratio, and then use it for calculating the spread. Z-score can normalize the spread so that we can generate our trading signal. After all calculations, we obtain a spread series that looks mean-reverting, and we can define our trading strategy. For example:</p>
     
     <a href="#">
       <img class="img-fluid" src="img/trading/20210818/img3.png" alt="">
@@ -140,7 +140,7 @@
       <li>Close the positions if z-score go back to zero or on market close</li>
     </ul>
 
-    <p>The above trading strategy is simple, we can fit different parameters into it, for example, trigger level of trading signal, the exit level, etc. And finally we can get the following plot of equity cruve on both pairs.</p>
+    <p>The above trading strategy is simple, we can fit different parameters into it, for example, trigger level of trading signal, the exit level, etc. And finally, we can get the following plot of equity curve on both pairs.</p>
 
     <a href="#">
       <img class="img-fluid" src="img/trading/20210818/img5.png" alt="">
@@ -150,12 +150,12 @@
       <img class="img-fluid" src="img/trading/20210818/img6.png" alt="">
     </a>
 
-    <p>The results are not after costs, costs would play in important role in pair trading, therefore these results may not be practical.</p>
+    <p>The results are not after costs, costs would play an important role in pair trading, therefore these results may not be practical.</p>
 
 
     <h2 class="section-heading">Conclusion</h2>
 
-    <p>We have done a simple co-integration test and back-tested a pair trading strategy, one biggest problem on pair trading would be time-varying hedge ratio. The spread could became not co-intergrated due to the time-varying hedge ratio, but we can have better estimation on the parameters using different approaches, such as <b>Kalman filters</b>, <b>rolling least squares regression</b> to handle this promblem. There are lot more to do before we implementing a pair trading strategy.</p>
+    <p>We have done a simple co-integration test and back-tested a pair trading strategy, one biggest problem on pair trading would be the time-varying hedge ratio. The spread could become not co-integrated due to the time-varying hedge ratio, but we can have a better estimation on the parameters using different approaches, such as <b>Kalman filters</b>, <b>rolling least squares regression</b> to handle this problem. There is a lot more to do before we implementing a pair trading strategy.</p>
 
     <p>Improvement can be made if we further investigate other time-varying methods for calculating the spread, we can further discuss more other methods in the future article.</p>
 
