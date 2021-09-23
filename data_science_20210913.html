@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>HK No Code - Blog on Trading and Data Sciecne</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- add icon link -->
+  <link href="img/web_icon.png" rel="icon" type="image/x-icon">
+  <!-- Custom fonts for this template -->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this template -->
+  <link href="css/clean-blog.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">HK No Code</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      Menu
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="about.html">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="trading_20210818.html">Trading</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="data_science_20210913.html">Data science</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="hkej_article_20191212.html">Other article</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="contact.html">Contact</a>
+      </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('img/data_science/20210913/bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>HSI futures price prediction by using HKEX Callable Bull/Bear Contracts (CBBC) data</h1>
+            <h2 class="subheading">Mining on HKEX CBBC Data by machine learning approach</h2>
+            <span class="meta">Posted by
+              <a href="#">Lawrence Luk</a>
+              on September 13, 2021</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+<article>
+  <div class="container">
+  <div class="row">
+  <div class="col-lg-8 col-md-10 mx-auto">
+
+    <h2 class="section-heading">Introduction</h2>
+
+    <p>CBBC is an option like structured product, they are popular in Hong Kong market, it also considered as a market indicator by many retail investors in Hong Kong, the purpose of this article is to investigate whether CBBC data have predictive power to predict the direction of HSI futures.</p>
+    
+    <p>In this article, we are going to investigate CBBC data and try to predict the direction of HSI futures closing price one day ahead. We will visualize the data, then predict the direction of HSI price using various models, finally make use of the prediction. If you are not familiar with CBBC, you can read the overview in <a href="https://www.hkex.com.hk/products/securities/structured-products/overview?sc_lang=en#cbbc">HKEX of structured product</a>.</p>
+
+    <h2 class="section-heading">Data</h2>
+
+    <p>The dataset consists of 874 days of HSI CBBC data, which was collected from HKEX, for those who are interested in the data, please visit <a href="https://www.hkex.com.hk/eng/cbbc/download/dnCSV.asp"> HKEX-Download Historical Data by Month for all CBBC</a>. Before we build our prediction model, we would like to understand our data.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20210913/img1.png" alt="">
+    </a>
+
+    <span class="caption text-muted">Daily volume of HSI CBBC equivalent to HSI futures in last 30 days</span>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20210913/img2.png" alt="">
+    </a>
+
+    <span class="caption text-muted">Daily CBBC open interests in last 30 days</span>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20210913/img3.png" alt="">
+    </a>
+
+    <span class="caption text-muted">Mandatory call event occurred in bull or bear contract in one day.</span>
+
+    <h2 class="section-heading">Feature Engineering</h2>
+
+    <p>In this section, we will create new features from our knowledge in finance, to help our prediction model, however, it would be too long to go through all the new features, so we will only briefly discuss this step. The original data from HKEX after preprocessing will look like this.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20210913/img4.png" alt="">
+    </a>
+
+    <p>We will aggregate the number of bull and bear contracts each day, the column will call <b>sum_bull</b> and <b>sum_bear</b>.</p>
+    
+    <p>Some retail investors believe that if sum_bull > sum_bear, then HSI is likely to drop since the institutional investors will manipulate the market and make a profit by triggering mandatory call events, therefore, we can calculate the ratio of bull and bear contract, call <b>bull_ratio</b> and <b>bear_ratio</b>. Then, we will sum the number of daily mandatory call events, and call <b>"n_kill_bull"</b> and <b>"n_kill_bear"</b>. </p>
+
+    <p>We can also calculate the distance between HSI and the nearest bull and bear contract, and they call <b>bull_dist</b> and <b>bear_dist</b>.</p>
+
+    <p>The market may memorize some past information, therefore some rolling statistics can be created, but we are not going to show all of it.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20210913/img5.png" alt="">
+    </a>
+    
+    <span class="caption text-muted">Data after feature engineering</span>
+
+
+    <h2 class="section-heading">Models and Predictions</h2>
+
+    <p>The models that we use in this article are <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html"><b>RandomForestClassifier</b></a>, <a href="https://xgboost.readthedocs.io/en/latest/python/python_api.html#module-xgboost.sklearn"><b>XGBClassifier</b></a>, and <a href="https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html"><b>MLPClassifier</b></a>. RandomForestClassifier and XGBClassifier are tree-based models, which is easy to train and interpret the model, however, they will overfit quickly. While MLPClassifier is neural network based model, it has high flexibility but is less interpretable.</p>
+
+    <p>For RandomForestClassifier and XGBClassifier, we will perform the following steps.</p>
+
+    <ul>
+      <li>Split our data, 90% training data, and 10% test data.</li>
+      <li>Search hyperparameters by using <b>GridSearchCV</b>, use <b>accuracy</b> as our metric.</li>
+      <li>Cross-validate the model by <b>TimeSeriesSplit</b>.</li>
+      <li>Train the model using the best hyperparameters.</li>
+      <li>Select the best 50 features from <b>feature_importances_</b>.</li>
+      <li>Search hyperparameters again and train the final model.</li>
+    </ul>
+
+    <p>The mean accuracy on RandomForestClassifier of 5 splits on <b>TimeSeriesSplit</b> is 0.50769. In the training set, the accuracy is 0.66624, and it is 0.65909 in the test set.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20210913/img6.png" alt="">
+    </a>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20210913/img7.png" alt="">
+    </a>
+
+    <p>The mean accuracy on XGBClassifier of 5 splits on <b>TimeSeriesSplit</b> is 0.55231. In the training set, the accuracy is 0.9949, and it is 0.625 in the test set.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20210913/img8.png" alt="">
+    </a>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20210913/img9.png" alt="">
+    </a>
+
+    <p>For MLPClassifier, we will perform the following steps.</p>
+
+    <ul>
+      <li>Split our data, 90% training data, and 10% test data.</li>
+      <li>Standardize features by using <b>StandardScaler</b></li>
+      <li>Search hyperparameters by using <b>GridSearchCV</b>, use <b>accuracy</b> as our metric.</li>
+      <li>Cross-validate the model by <b>TimeSeriesSplit</b>.</li>
+      <li>Train the final model using the best hyperparameters.</li>
+    </ul>
+
+    <p>The mean accuracy on MLPClassifier of 5 splits on <b>TimeSeriesSplit</b> is 0.53231. In the training set, the accuracy is 0.68026, and it is 0.54546 in the test set.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20210913/img10.png" alt="">
+    </a>
+
+    <h2 class="section-heading">Conclusion</h2>
+
+    <p>We apply 3 different models to predict the direction of HSI futures, those model shows that CBBC data of HSI may have prediction power, the number of mandatory call event seems to be important to predict HSI movement. In the next article, we will further investigate ensembles and model stacking  of those three models, to test whether we can have higher accuracy by combining those models.</p>
+
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <hr>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy; HKNOCODE 2020</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/clean-blog.min.js"></script>
+
+</body>
+
+</html>
