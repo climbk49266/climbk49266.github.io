@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>HK No Code - Blog on Trading and Data Sciecne</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- add icon link -->
+  <link href="img/web_icon.png" rel="icon" type="image/x-icon">
+  <!-- Custom fonts for this template -->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this template -->
+  <link href="css/clean-blog.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">HK No Code</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      Menu
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="about.html">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="trading_20210818.html">Trading</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="data_science_20211007.html">Data science</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="hkej_article_20191212.html">Other article</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="contact.html">Contact</a>
+      </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('img/data_science/20211007/bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>Model stacking and update on HSI futures price prediction by using HKEX Callable Bull/Bear Contracts (CBBC) data</h1>
+            <h2 class="subheading">Model stacking to improve accuracy and out-of-sample prediction results</h2>
+            <span class="meta">Posted by
+              <a href="#">Lawrence Luk</a>
+              on October 7, 2021</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+<article>
+  <div class="container">
+  <div class="row">
+  <div class="col-lg-8 col-md-10 mx-auto">
+
+    <h2 class="section-heading">Introduction</h2>
+
+    <p>In the <a href="data_science_20210913.html">last article</a>, we discussed using HSI CBBC data to predict HSI futures close to close return, in this article we are going to extend our discussion to out-of-sample results and model stacking, starting with <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.VotingClassifier.html">VotingClassifier</a>, the following model will be <a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">LogisticRegression</a>, <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier">RandomForestClassifier</a>, and <a href="https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html?highlight=mlpclassifier#sklearn.neural_network.MLPClassifier">MLPClassifier</a>.</p>
+
+    <P>Profitability is one of our metrics, in the final section we will summarize the trading performance using the model. <img src="img/lihkg/cow_power_special.gif"></P>
+
+    <h2 class="section-heading">Data</h2>
+
+    <p>We will use the data in the previous article which contained 907 observations, we have added various features into our data, for those who are interested in the features engineering part please refer to <a href="data_science_20210913.html">this article</a>. <img src="img/lihkg/cow_sorry.webp"> The extended data have 34 observations, it starts from 20210831 to 20211021.</p>
+
+    <h2 class="section-heading">Out-of-sample prediction accuracy</h2>
+
+    <p>By using the model we trained in the previous article, we can simply input our extended data into the model and obtain new prediction results.</p>
+
+    <p>First, our RandomForestClassifier performs well, it reaches accuracy above 60% in the testing and extended period. <img src="img/lihkg/cow_scheme.webp"></p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20211007/img1.png" alt="">
+    </a>
+
+    <p>Second, XGBClassifier fits the training data very well, however, it does not predict well in the extended period. <img src="img/lihkg/cow_unexpected.webp"></p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20211007/img2.png" alt="">
+    </a>
+
+    <p>Third, our MLPClassifier only has 50% accuracy in the extended period, it seems that it does not have prediction power. <img src="img/lihkg/cow_sosad.webp"></p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20211007/img3.png" alt="">
+    </a>
+
+    <p>The following figure shows the cumulative log return on HSI futures of each model.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20211007/img4.png" alt="">
+    </a>
+
+    <h2 class="section-heading">Model stacking</h2>
+
+    <p>In this section, we will start with the simplest model which is VotingClassifier, it has the highest interpretability, followed by LogisticRegression, RandomForestClassifier, and MLPClassifier the model complicity will get higher but lower interpretability.</p>
+
+    <p>The model will be trained and validated using the test data, and pick the best model to predict extended period, the results will demonstrate below. <img src="img/lihkg/cow_smile.webp"></p>
+
+    <p><b>Model stacking - VotingClassifier</b></p>
+
+    <p>This is the simplest model, if the majority vote for True, then the final decision will be True, no training and validating are needed. The model perform well in the testing period, it outperformed the RandomForestClassifier, however, there is no improvement in the the extended period. <img src="img/lihkg/cow_arrr.gif"></p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20211007/img5.png" alt="">
+    </a>
+
+    <p><b>Model stacking - LogisticRegression</b></p>
+
+    <p>RandomForestClassifier is the most important input in our LogisticRegression, we also get a negative coefficient in our MLPClassifier. It fits better than VotingClassifier in the testing period, but it does not have prediction power in the extended period. <img src="img/lihkg/cow_sosad.webp"></p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20211007/img6.png" alt="">
+    </a>
+
+    <p><b>Model stacking - RandomForestClassifier</b></p>
+
+    <p>RandomForestClassifier performs well in both periods, but it still doesn't outperform a single RandomForestClassifier. <img src="img/lihkg/cow_smile.webp"></p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20211007/img7.png" alt="">
+    </a>
+
+    <p><b>Model stacking - MLPClassifier</b></p>
+
+    <p>MLPClassifier has the same result as single RandomForestClassifier does, it seems to suggest that we better use a single RandomForestClassifier.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20211007/img8.png" alt="">
+    </a>
+
+    <p><b>Model stacking - Summary</b></p>
+
+    <p>The following plot shows the cumulative log return on HSI futures. In the next section, we will discuss the trading strategy using a single RandomForestClassifier to trade HSI futures. <img src="img/lihkg/car.webp"></p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20211007/img9.png" alt="">
+    </a> 
+
+    <h2 class="section-heading">Backtest results</h2>
+
+    <p>A single RandomForestClassifier will be our final model, and we will use this model to predict the direction of HSI futures close to close return, then we will simulate the trading results and take a look at its statistic.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20211007/img10.png" alt="">
+    </a>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20211007/img11.png" alt="">
+    </a>
+    
+    <p>The equity curve looks good in both periods, the mean profit is 73 points, it can cover the transaction cost and afford some slippages. The long-short position is balanced, it seems that the model can earn money in market up or down. <img src="img/lihkg/cow_smile.webp"></p>
+
+    <p>Most importantly the t-statistic of the model is 2.69 which is statistically significant, the maximum drawdown and biggest loss in one day are around 1500 and 1000 points, the slightly larger risk is inevitable in overnight trading, -3 standard deviation is common when the market is volatile, we can hedge our position by long or short other index futures.</p>
+
+    <h2 class="section-heading">Conclusion</h2>
+
+    <p>In this article, we perform an out-of-sample test using extended data, RandomForestClassifier performs best, which has 60% accuracy in the extended period. In the second part of this article, we discussed model stacking using different methods, however, none of it is better than a single RandomForestClassifier. In the final section, we backtested our single RandomForestClassifier, the model is statistically significant in the out-of-sample period, we can trade HSI close to close to make some profit. <img src="img/lihkg/car.webp"></p>
+
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <hr>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy; HKNOCODE 2020</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/clean-blog.min.js"></script>
+
+</body>
+
+</html>
