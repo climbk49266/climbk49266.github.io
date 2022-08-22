@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>HK No Code - Blog on Trading and Data Sciecne</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- add icon link -->
+  <link href="img/web_icon.png" rel="icon" type="image/x-icon">
+  <!-- Custom fonts for this template -->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this template -->
+  <link href="css/clean-blog.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">HK No Code</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      Menu
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="about.html">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="trading_20210818.html">Trading</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="data_science_20220220.html">Data science</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="hkej_article_20191212.html">Other article</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="contact.html">Contact</a>
+      </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('img/data_science/20220620/bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>Futures trading using reinforcement learning</h1>
+            <h2 class="subheading">Training a agent to trade HSI futures</h2>
+            <span class="meta">Posted by
+              <a href="#">Lawrence Luk</a>
+              on June 20, 2022</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+<article>
+  <div class="container">
+  <div class="row">
+  <div class="col-lg-8 col-md-10 mx-auto">
+
+    <h2 class="section-heading">Introduction</h2>
+
+    <p>Reinforcement learning often found in autonomous driving, the agent will control the vehicle and interacts with simulated environment or in reality, therefore it would be interesting to see whether the agent can perform well in financial market. <img src="img/lihkg/pig_dance4.webp"></p>
+
+    <p>In this article we will implement Deep Q Networks (DQN) by using <a href="https://docs.ray.io/en/latest/rllib/index.html">RLlib</a>, for the those who are interested in DNQ please read <a href="https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf">this paper</a>. <img src="img/lihkg/pig_sowhat.webp"></p>
+
+    <h2 class="section-heading">Data</h2>
+
+    <p>For simplicity, we will use daily Heng Seng Index future data to explore this idea. <img src="img/lihkg/pig_wail.webp"> Our data contains HSI future open, high, low, close log return from t0 to t-15, therefore the agent can make decision using historical data. There are total 5544 rows of data, 80% for training, 14% for validation and 6% for testing. The training set include data from 20000101 to 20171231, the validation set include data from 20180101 to 20201231, the test set include data from 20210101 to 20220619.</p>
+
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20220620/img1.png" alt="">
+    </a>
+
+
+    <h2 class="section-heading">Model</h2>
+
+    <p>As we said in the beginning, we will use <b>Deep Q Networks (DQN)</b> to train our agent, but before we can move forward we will need to setup the environment.</p>
+    
+    <p>The agent can <b>buy</b>, <b>sell</b>, <b>hold</b>, <b>cover buy then sell</b>, and <b>cover sell then buy</b> on each day. When position goes to 0 from 1 or -1, we can obtain the trading profit, and we will use it as reward, however we assume there is no other cost for example, transaction cost<img src="img/lihkg/pig_wail.webp">.</p>
+
+    <p>During the episode, the agent can observe it's state which contain Open, High, Low, Close data with 15 days lookback and it can compute the an action based on the state, following with the positive or negative reward, the agent can update the weights of the Q-network and minimising the loss functions by using  stochastic gradient descent. <img src="img/lihkg/pig_free.gif"></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h2 class="section-heading">Result</h2>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20220220/img2.png" alt="">
+    </a>
+
+    <p></p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20220220/img3.png" alt="">
+    </a>
+
+    <p>We have over 170 days as our testing period, the result above indicate that the prediction accuracy in Hang Seng Index and Nikkei 225 futures are over 50%, however, in Kospi 200 the model is close to random guess. For the model in Xina50, we did some model ensembling, therefore 0 will appear on the final prediction, accuracy is not the best matric for this market. <img src="img/lihkg/cow_arrr.gif"></p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20220220/img4.png" alt="">
+    </a>
+
+    <p>When we look at the trading performance, Xina50 have the highest t-value, while the mean profit in term of index points in Hang Seng Index and Kospi 200 are not statistically significant. <img src="img/lihkg/cow_unexpected.webp"></p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20220220/img5.png" alt="">
+    </a>
+
+    <span class="caption text-muted">updated on 20220524.</span>
+
+    <p></p>
+
+    <h2 class="section-heading">Conclusion</h2>
+
+    <p>more model, pattern, min data, feature engineer</p>
+
+
+
+
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <hr>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy; HKNOCODE 2020</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/clean-blog.min.js"></script>
+
+</body>
+
+</html>
