@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>HK No Code - Blog on Trading and Data Sciecne</title>
+  <title>HK No Code - Blog on Trading and Data Science</title>
 
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -93,11 +93,9 @@
 
     <p>For simplicity, we will use daily Heng Seng Index future data to explore this idea. <img src="img/lihkg/pig_wail.webp"> Our data contains HSI future open, high, low, close log return from t0 to t-15, therefore the agent can make decision using historical data. There are total 5544 rows of data, 80% for training, 14% for validation and 6% for testing. The training set include data from 20000101 to 20171231, the validation set include data from 20180101 to 20201231, the test set include data from 20210101 to 20220619.</p>
 
-
     <a href="#">
       <img class="img-fluid" src="img/data_science/20220620/img1.png" alt="">
     </a>
-
 
     <h2 class="section-heading">Model</h2>
 
@@ -107,48 +105,11 @@
 
     <p>During the episode, the agent can observe it's state which contain Open, High, Low, Close data with 15 days lookback and it can compute the an action based on the state, following with the positive or negative reward, the agent can update the weights of the Q-network and minimising the loss functions by using  stochastic gradient descent. <img src="img/lihkg/pig_free.gif"></p>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <h2 class="section-heading">Result</h2>
 
     <a href="#">
       <img class="img-fluid" src="img/data_science/20220220/img2.png" alt="">
     </a>
-
-    <p></p>
-
-    <a href="#">
-      <img class="img-fluid" src="img/data_science/20220220/img3.png" alt="">
-    </a>
-
-    <p>We have over 170 days as our testing period, the result above indicate that the prediction accuracy in Hang Seng Index and Nikkei 225 futures are over 50%, however, in Kospi 200 the model is close to random guess. For the model in Xina50, we did some model ensembling, therefore 0 will appear on the final prediction, accuracy is not the best matric for this market. <img src="img/lihkg/cow_arrr.gif"></p>
-
-    <a href="#">
-      <img class="img-fluid" src="img/data_science/20220220/img4.png" alt="">
-    </a>
-
-    <p>When we look at the trading performance, Xina50 have the highest t-value, while the mean profit in term of index points in Hang Seng Index and Kospi 200 are not statistically significant. <img src="img/lihkg/cow_unexpected.webp"></p>
-
-    <a href="#">
-      <img class="img-fluid" src="img/data_science/20220220/img5.png" alt="">
-    </a>
-
-    <span class="caption text-muted">updated on 20220524.</span>
 
     <p></p>
 
