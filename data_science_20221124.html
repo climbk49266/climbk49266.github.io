@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>HK No Code - Blog on Trading and Data Science</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- add icon link -->
+  <link href="img/web_icon.png" rel="icon" type="image/x-icon">
+  <!-- Custom fonts for this template -->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this template -->
+  <link href="css/clean-blog.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">HK No Code</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      Menu
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="about.html">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="trading_20210818.html">Trading</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="data_science_20221124.html">Data science</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="hkej_article_20191212.html">Other article</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="contact.html">Contact</a>
+      </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('img/data_science/20221124/bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>Futures trading using reinforcement learning</h1>
+            <h2 class="subheading">Training an agent to trade HSI futures</h2>
+            <span class="meta">Posted by
+              <a href="#">Lawrence Luk</a>
+              on November 24, 2022</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+<article>
+  <div class="container">
+  <div class="row">
+  <div class="col-lg-8 col-md-10 mx-auto">
+
+    <h2 class="section-heading">Introduction</h2>
+
+    <p>Reinforcement learning is often found in autonomous driving, the agent will control the vehicle and interacts with the simulated environment or in reality, therefore it would be interesting to see whether the agent can perform well in the financial market. <img src="img/lihkg/pig_dance4.webp"></p>
+
+    <p>In this article we will implement Deep Q Networks (DQN) by using <a href="https://docs.ray.io/en/latest/rllib/index.html">RLlib</a>, for those who are interested in DNQ please read <a href="https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf">this paper</a>. <img src="img/lihkg/pig_sowhat.webp"></p>
+
+    <h2 class="section-heading">Data</h2>
+
+    <p>For simplicity, we will use daily Heng Seng Index future data to explore this idea. <img src="img/lihkg/pig_wail.webp"> Our data contains HSI future open, high, low, close log return from t0 to t-15, therefore the agent can make a decision using historical data. There is a total of 5679 rows of data, 70% for training, 17% for validation, and 13% for testing. The training set includes data from 20000124 to 20151231, the validation set includes data from 20160104 to 20191231, and the test set includes data from 20200102 to 20221122.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20221124/img1.png" alt="">
+    </a>
+
+    <h2 class="section-heading">Model</h2>
+
+    <p>As we said in the beginning, we will use <b>Deep Q Networks (DQN)</b> to train our agent, but before we can move forward we will need to set up the environment.</p>
+    
+    <p>The agent can <b>buy</b>, <b>sell</b>, <b>hold</b>, <b>cover buy then sell</b>, and <b>cover sell then buy</b> on each day. When the position goes to 0 from 1 or -1, we can obtain the trading profit, and we will use it as a reward, however, we assume there is no other cost, for example, transaction cost. <img src="img/lihkg/pig_wail.webp"></p>
+
+    <p>During the episode, the agent can observe its state which contains Open, High, Low, Close data with 15 days look back and it can compute the action based on the state, followed by the positive or negative reward, the agent can update the weights of the Q-network and minimizing the loss functions by using  stochastic gradient descent. <img src="img/lihkg/pig_free.gif"></p>
+
+    <p>In this article we want to make it more simple, instead of calculating the trading profit, we will use 1 and -1 be our rewards. If the agent has a positive return, the reward will be 1 otherwise -1. The reason behind this is the author finds DQN is highly unstable in the training when we use trading profit as a reward, hopefully, we could work around this issue in a future article. <img src="img/lihkg/pig_wail.webp"> The meaning of this article is only to have a little taste of reinforcement learning on financial data.</p>
+
+    <h2 class="section-heading">Result</h2>
+
+    <p>Firstly, let us take a look at the mean episode reward to evaluate the training performance.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20221124/img2.png" alt="">
+    </a>
+
+    <p>The agent learns the policy quickly in our environment, which produces a smooth reward curve during the training. The peak occurred at around 2150 episodes, and afterward, the mean episode declined.</p>
+
+    <p>We can have a look at the cumulative reward at 2150 episodes of training.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20221124/img3.png" alt="">
+    </a>
+
+    <p>The training period looks good, the agent reaches an all-time high in the test period. The sum of the mean reward in the test and validation set is close to 0, which may indicate that our agent is overfitted. <img src="img/lihkg/pig_wail.webp"> But this time we are not going to dive too deep into this, we decided to see what is the performance of the agent with 2150 episodes.</p>
+
+    <a href="#">
+      <img class="img-fluid" src="img/data_science/20221124/img4.png" alt="">
+    </a>
+
+    <p>We can obtain the trading profit by simulating the action that our agent takes and calculating the cumulative trading profit. <img src="img/lihkg/pig_dance4.webp"></p>
+
+    <p>Our agent overall performs better than buy and hold in HSI futures. In the test and validation period, the sum of trading profit is also not statistically significant, we cannot claim that the agent can generate profit in those periods.</p>
+
+    <h2 class="section-heading">Conclusion</h2>
+
+    <p>In this article, we have discussed a simple usage of <b>Deep Q Networks (DQN)</b> model in reinforcement learning. Instead of trading profit, we use 1 and -1 to represent the reward. Our agent performed well in the training period, but not in the second and third periods which is not surprising. <img src="img/lihkg/pig_wail.webp"></p>
+    
+    <p>In the future, we hope we can try more reinforcement learning models and train the agent using different timeframes of futures data. Thanks for reading. <img src="img/lihkg/pig_free.gif"></p>
+
+
+
+
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <hr>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <ul class="list-inline text-center">
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+          <p class="copyright text-muted">Copyright &copy; HKNOCODE 2020</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/clean-blog.min.js"></script>
+
+</body>
+
+</html>
